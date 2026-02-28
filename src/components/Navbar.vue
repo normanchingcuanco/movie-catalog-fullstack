@@ -1,17 +1,63 @@
 <template>
-  <nav>
-    <router-link v-if="auth.token" to="/movies">Movies</router-link>
-    <router-link v-if="auth.token" to="/watchlist">Watchlist</router-link>
+  <div>
 
-    <router-link v-if="auth.token && auth.isAdmin" to="/admin">
-      Admin
-    </router-link>
+    <!-- Desktop Sidebar -->
+    <aside
+      class="sidebar"
+      @mouseenter="expanded = true"
+      @mouseleave="expanded = false"
+      :class="{ expanded: expanded }"
+    >
 
-    <router-link v-if="!auth.token" to="/login">Login</router-link>
-    <router-link v-if="!auth.token" to="/register">Register</router-link>
+      <!-- Logo -->
+      <div class="logo">
+        <img src="/logo_reeltalk.png" alt="ReelTalk" />
+      </div>
 
-    <button v-if="auth.token" @click="logout">Logout</button>
-  </nav>
+      <!-- Nav Links -->
+      <nav>
+        <router-link to="/movies">
+          🎬 <span v-if="expanded">Movies</span>
+        </router-link>
+
+        <router-link to="/watchlist">
+          ⭐ <span v-if="expanded">Watchlist</span>
+        </router-link>
+
+        <router-link
+          v-if="auth.isAdmin"
+          to="/admin"
+        >
+          🛠 <span v-if="expanded">Admin</span>
+        </router-link>
+
+        <button @click="logout">
+          🚪 <span v-if="expanded">Logout</span>
+        </button>
+      </nav>
+
+    </aside>
+
+    <!-- Mobile Hamburger -->
+    <button class="hamburger" @click="toggleMobile">
+      ☰
+    </button>
+
+    <div v-if="showMobile" class="mobile-drawer">
+      <router-link @click="closeMobile" to="/movies">Movies</router-link>
+      <router-link @click="closeMobile" to="/watchlist">Watchlist</router-link>
+      <router-link
+        v-if="auth.isAdmin"
+        @click="closeMobile"
+        to="/admin"
+      >
+        Admin
+      </router-link>
+
+      <button @click="logout">Logout</button>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -20,32 +66,70 @@ import { useAuthStore } from "../auth"
 export default {
   setup() {
     const auth = useAuthStore()
+    return { auth }
+  },
 
-    const logout = () => {
-      auth.logout()
-      window.location.href = "/login"
+  data() {
+    return {
+      showMobile: false,
+      expanded: false
     }
+  },
 
-    return { auth, logout }
+  methods: {
+    logout() {
+      this.auth.logout()
+      window.location.href = "/login"
+    },
+
+    toggleMobile() {
+      this.showMobile = !this.showMobile
+    },
+
+    closeMobile() {
+      this.showMobile = false
+    }
   }
 }
 </script>
 
 <style>
-nav {
-  background: #222;
-  padding: 15px;
+.sidebar {
+  position: fixed;
+  height: 100vh;
+  width: 80px;
+  background: linear-gradient(180deg, #A14428, #E35336);
+  padding: 20px 10px;
+  transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1000;
 }
-a {
+
+.sidebar:hover {
+  width: 220px;
+}
+
+.logo img {
+  width: 160px;
+  transition: all 0.3s ease;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.sidebar a {
   color: white;
-  margin-right: 15px;
   text-decoration: none;
+  font-weight: 500;
 }
-button {
-  background: red;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  cursor: pointer;
+
+.logout {
+  margin-top: auto;
 }
 </style>

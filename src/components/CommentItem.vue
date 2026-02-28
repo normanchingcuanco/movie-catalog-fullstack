@@ -1,33 +1,66 @@
 <template>
   <div class="comment">
+    <!-- COMMENT TEXT OR GIF -->
     <p v-if="!isEditing">
       <strong>{{ comment.userId?.username || "User" }}:</strong>
-      {{ comment.comment }}
+
+      <span v-if="isGif(comment.comment)">
+        <img :src="comment.comment" class="gif" />
+      </span>
+
+      <span v-else>
+        {{ comment.comment }}
+      </span>
+
       <span v-if="comment.isEdited">(edited)</span>
     </p>
 
+    <!-- EDIT MODE -->
     <div v-if="isEditing">
       <textarea v-model="editText" />
       <button @click="submitEdit">Save</button>
       <button @click="cancelEdit">Cancel</button>
     </div>
 
+    <!-- ACTIONS -->
     <div v-if="auth.token" class="actions">
-      <button @click="showReply = !showReply">Reply</button>
+      <button @click="showReply = !showReply">
+        Reply
+      </button>
 
-      <button @click="react('like')">👍 {{ comment.likes?.length || 0 }}</button>
-      <button @click="react('dislike')">👎 {{ comment.dislikes?.length || 0 }}</button>
+      <button @click="react('like')">
+        👍 {{ comment.likes?.length || 0 }}
+      </button>
 
-      <button v-if="canModify" @click="startEdit">Edit</button>
-      <button v-if="canModify" @click="deleteComment">Delete</button>
+      <button @click="react('dislike')">
+        👎 {{ comment.dislikes?.length || 0 }}
+      </button>
+
+      <button v-if="canModify" @click="startEdit">
+        Edit
+      </button>
+
+      <button v-if="canModify" @click="deleteComment">
+        Delete
+      </button>
     </div>
 
+    <!-- REPLY BOX -->
     <div v-if="showReply" class="reply-box">
-      <textarea v-model="replyText" placeholder="Write a reply..." />
-      <button @click="addReply">Submit Reply</button>
+      <textarea
+        v-model="replyText"
+        placeholder="Write a reply..."
+      />
+      <button @click="addReply">
+        Submit Reply
+      </button>
     </div>
 
-    <div v-if="comment.replies?.length" class="replies">
+    <!-- REPLIES -->
+    <div
+      v-if="comment.replies?.length"
+      class="replies"
+    >
       <CommentItem
         v-for="reply in comment.replies"
         :key="reply._id"
@@ -65,20 +98,37 @@ export default {
     canModify() {
       const isAdmin = this.auth.isAdmin === true
       const isOwner =
-        String(this.comment.userId?._id || this.comment.userId) === String(this.auth.userId)
+        String(this.comment.userId?._id || this.comment.userId) ===
+        String(this.auth.userId)
 
       return isAdmin || isOwner
     }
   },
 
   methods: {
+    // 🔥 GIF DETECTION
+    isGif(text) {
+      return (
+        typeof text === "string" &&
+        (
+          text.endsWith(".gif") ||
+          text.includes("giphy.com") ||
+          text.includes("tenor.com")
+        )
+      )
+    },
+
     async addReply() {
       if (!this.replyText.trim()) return
 
       await api.patch(
         `/movies/replyComment/${this.movieId}/${this.comment._id}`,
         { comment: this.replyText },
-        { headers: { Authorization: `Bearer ${this.auth.token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${this.auth.token}`
+          }
+        }
       )
 
       this.replyText = ""
@@ -102,7 +152,11 @@ export default {
       await api.patch(
         `/movies/editComment/${this.movieId}/${this.comment._id}`,
         { comment: this.editText },
-        { headers: { Authorization: `Bearer ${this.auth.token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${this.auth.token}`
+          }
+        }
       )
 
       this.isEditing = false
@@ -112,7 +166,11 @@ export default {
     async deleteComment() {
       await api.delete(
         `/movies/deleteComment/${this.movieId}/${this.comment._id}`,
-        { headers: { Authorization: `Bearer ${this.auth.token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${this.auth.token}`
+          }
+        }
       )
 
       this.$emit("refresh")
@@ -122,7 +180,11 @@ export default {
       await api.patch(
         `/movies/reactComment/${this.movieId}/${this.comment._id}`,
         { type },
-        { headers: { Authorization: `Bearer ${this.auth.token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${this.auth.token}`
+          }
+        }
       )
 
       this.$emit("refresh")
@@ -138,18 +200,28 @@ export default {
   background: #f2f2f2;
   border-radius: 6px;
 }
+
 .actions button {
   margin-right: 10px;
 }
+
 .reply-box {
   margin-top: 8px;
 }
+
 .replies {
   margin-left: 20px;
   margin-top: 8px;
 }
+
 textarea {
   width: 100%;
   min-height: 60px;
+}
+
+.gif {
+  max-width: 250px;
+  border-radius: 8px;
+  margin-top: 6px;
 }
 </style>

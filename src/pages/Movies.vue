@@ -10,7 +10,7 @@
           placeholder="e.g. The Dark Knight"
           @keyup.enter="addMovie"
         />
-        <button id="addMovie" @click="addMovie" :disabled="isAdding">
+        <button class="primary" id="addMovie" @click="addMovie" :disabled="isAdding">
           {{ isAdding ? "Adding..." : "Add Movie" }}
         </button>
       </div>
@@ -41,7 +41,7 @@
         <option value="trending">Trending</option>
       </select>
 
-      <button @click="applyFilters">Apply</button>
+      <button class="primary" @click="applyFilters">Apply</button>
       <button class="secondary" @click="resetFilters">Reset</button>
     </div>
 
@@ -57,13 +57,13 @@
     </div>
 
     <div class="pagination" v-if="totalPages > 1">
-      <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">
+      <button class="primary" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">
         Previous
       </button>
 
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
 
-      <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">
+      <button class="primary" :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">
         Next
       </button>
     </div>
@@ -260,9 +260,11 @@ export default {
 }
 
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
+  gap: 28px;
+  justify-content: center;   /* 🔥 centers entire grid */
+  margin-top: 30px;
 }
 
 .pagination {

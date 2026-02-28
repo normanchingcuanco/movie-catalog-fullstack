@@ -1,15 +1,23 @@
 <template>
-  <div class="card">
-    <img :src="posterSrc" alt="Poster" class="poster" />
+  <div class="card movie-card">
+
+    <div class="poster-wrapper">
+      <img
+        :src="posterSrc"
+        class="poster"
+      />
+    </div>
 
     <div class="card-content">
-      <h3>{{ movie.title }}</h3>
+      <h3 class="movie-title">{{ movie.title }}</h3>
 
       <p class="meta">
         <strong>{{ movie.year || "—" }}</strong> • {{ movie.genre || "—" }}
       </p>
 
-      <p class="description">{{ truncatedDescription }}</p>
+      <p class="description">
+        {{ truncatedDescription }}
+      </p>
 
       <div class="stats">
         <span>⭐ {{ (movie.averageRating || 0).toFixed(1) }}</span>
@@ -18,26 +26,23 @@
       </div>
 
       <div v-if="auth.token" class="actions">
-        <button @click="toggleLike" :disabled="isBusy">
+        <button class="ghost" @click="toggleLike">
           {{ hasLiked ? "Unlike ❤️" : "Like ❤️" }}
         </button>
 
-        <button @click="toggleWatchlist" :disabled="isBusy">
+        <button class="secondary" @click="toggleWatchlist">
           {{ inWatchlist ? "Remove 📌" : "Watchlist 📌" }}
         </button>
-
-        <select v-model="selectedRating" @change="rateMovie" :disabled="isBusy">
-          <option disabled value="">Rate</option>
-          <option v-for="n in 5" :key="n" :value="n">
-            {{ n }} ⭐
-          </option>
-        </select>
       </div>
 
       <router-link :to="`/movies/${movie._id}`">
-        <button class="view-btn">View Movie</button>
+        <button class="primary view-btn">
+          View Movie
+        </button>
       </router-link>
+
     </div>
+
   </div>
 </template>
 
@@ -149,55 +154,66 @@ export default {
 </script>
 
 <style>
-.card {
-  background: white;
-  border-radius: 10px;
-  width: 260px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+.movie-card {
+  width: 300px;
   display: flex;
   flex-direction: column;
+  align-items: center;   /* 🔥 centers inner content */
+  padding: 20px;
+}
+
+.poster-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;  /* 🔥 centers poster horizontally */
 }
 
 .poster {
-  width: 100%;
-  height: 350px;
+  width: 260px;
+  height: 390px;
   object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 .card-content {
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+  text-align: center;  /* 🔥 center text */
+}
+
+.movie-title {
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
 .meta {
   font-size: 13px;
+  margin-bottom: 10px;
   color: #666;
 }
 
 .description {
   font-size: 14px;
-  color: #444;
+  margin-bottom: 12px;
 }
 
 .stats {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 18px;
   font-size: 13px;
-  margin-top: 6px;
+  margin-bottom: 12px;
 }
 
 .actions {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .view-btn {
-  margin-top: 10px;
-  padding: 6px;
-  cursor: pointer;
+  width: 100%;
 }
 </style>
