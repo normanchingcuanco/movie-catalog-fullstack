@@ -54,13 +54,56 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+/* Container */
 .container {
   padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+
+/* Cards Grid */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  justify-items: center;
 }
+
+/* Card */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Poster */
+.poster {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+
+  .container {
+    padding: 12px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+}
+
 </style>

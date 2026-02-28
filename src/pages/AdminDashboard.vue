@@ -493,9 +493,10 @@ export default {
 
 /* ================= CONTAINER ================= */
 .container {
-  padding: 40px 40px 40px 110px; /* reduce side padding */
+  padding: 40px;
   width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* ================= METRIC CARDS ================= */
@@ -504,7 +505,7 @@ export default {
   flex-wrap: wrap;
   gap: 22px;
   margin-top: 25px;
-  margin-bottom: 30px; /* add space below metrics */
+  margin-bottom: 30px;
 }
 
 .card {
@@ -560,7 +561,7 @@ export default {
 /* ================= TABLE ================= */
 table {
   width: 100%;
-  table-layout: auto; /* allow natural expansion */
+  table-layout: fixed; /* 🔥 prevents overflow crush */
   border-collapse: collapse;
   margin-top: 25px;
   background: white;
@@ -592,8 +593,9 @@ td {
 .actions-cell {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  min-width: 140px;
+  gap: 10px;
+  width: 120px;        /* 🔥 fixed width so it never gets cropped */
+  flex-shrink: 0;      /* 🔥 prevents shrinking */
 }
 
 .actions-cell button {
@@ -622,7 +624,7 @@ td {
 }
 
 .form {
-  margin-bottom: 40px; /* adds spacing before Movies section */
+  margin-bottom: 40px;
 }
 
 .form button {
@@ -758,6 +760,18 @@ td {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+@media (max-width: 768px) {
+
+  table {
+    min-width: 900px; /* force horizontal scroll */
+  }
+
+  .actions-cell {
+    min-width: 160px;
+  }
+
 }
 
 </style>

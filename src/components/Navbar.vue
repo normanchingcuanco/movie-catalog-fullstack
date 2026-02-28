@@ -1,20 +1,16 @@
 <template>
   <div>
-
     <!-- Desktop Sidebar -->
     <aside
       class="sidebar"
       @mouseenter="expanded = true"
       @mouseleave="expanded = false"
-      :class="{ expanded: expanded }"
+      :class="{ expanded }"
     >
-
-      <!-- Logo -->
       <div class="logo">
         <img src="/logo_reeltalk.png" alt="ReelTalk" />
       </div>
 
-      <!-- Nav Links -->
       <nav>
         <router-link to="/movies">
           🎬 <span v-if="expanded">Movies</span>
@@ -24,39 +20,63 @@
           ⭐ <span v-if="expanded">Watchlist</span>
         </router-link>
 
-        <router-link
-          v-if="auth.isAdmin"
-          to="/admin"
-        >
+        <router-link v-if="auth.isAdmin" to="/admin">
           🛠 <span v-if="expanded">Admin</span>
         </router-link>
 
-        <button @click="logout">
+        <button class="logout-btn" @click="logout">
           🚪 <span v-if="expanded">Logout</span>
         </button>
       </nav>
-
     </aside>
 
-    <!-- Mobile Hamburger -->
-    <button class="hamburger" @click="toggleMobile">
+    <!-- Mobile Hamburger (HIDE WHEN DRAWER IS OPEN) -->
+    <button
+      v-if="auth.token && !showMobile"
+      class="hamburger"
+      @click="openMobile"
+      aria-label="Open menu"
+    >
       ☰
     </button>
 
+    <!-- Overlay -->
+    <div
+      v-if="showMobile"
+      class="mobile-overlay"
+      @click="closeMobile"
+    ></div>
+
+    <!-- Drawer -->
     <div v-if="showMobile" class="mobile-drawer">
-      <router-link @click="closeMobile" to="/movies">Movies</router-link>
-      <router-link @click="closeMobile" to="/watchlist">Watchlist</router-link>
+      <!-- Drawer Header -->
+      <div class="drawer-header">
+        <img class="drawer-logo" src="/logo_reeltalk.png" alt="ReelTalk" />
+        <button class="drawer-close" @click="closeMobile" aria-label="Close menu">
+          ✕
+        </button>
+      </div>
+
+      <router-link @click="closeMobile" to="/movies">
+        🎬 Movies
+      </router-link>
+
+      <router-link @click="closeMobile" to="/watchlist">
+        ⭐ Watchlist
+      </router-link>
+
       <router-link
         v-if="auth.isAdmin"
         @click="closeMobile"
         to="/admin"
       >
-        Admin
+        🛠 Admin
       </router-link>
 
-      <button @click="logout">Logout</button>
+      <button class="drawer-logout" @click="logout">
+        🚪 Logout
+      </button>
     </div>
-
   </div>
 </template>
 
@@ -71,49 +91,54 @@ export default {
 
   data() {
     return {
-      showMobile: false,
-      expanded: false
+      expanded: false,
+      showMobile: false
     }
   },
 
   methods: {
-    logout() {
-      this.auth.logout()
-      window.location.href = "/login"
-    },
-
-    toggleMobile() {
-      this.showMobile = !this.showMobile
+    openMobile() {
+      this.showMobile = true
     },
 
     closeMobile() {
       this.showMobile = false
+    },
+
+    logout() {
+      this.auth.logout()
+      this.closeMobile()
+      this.$router.push("/login")
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+/* ===============================
+   DESKTOP SIDEBAR
+=============================== */
 .sidebar {
   position: fixed;
-  height: 100vh;
+  top: 0;
+  left: 0;
   width: 80px;
+  height: 100vh;
   background: linear-gradient(180deg, #A14428, #E35336);
   padding: 20px 10px;
   transition: width 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  z-index: 1000;
+  z-index: 2000;
+  overflow: hidden;
 }
 
-.sidebar:hover {
+.sidebar.expanded {
   width: 220px;
 }
 
 .logo img {
   width: 160px;
-  transition: all 0.3s ease;
 }
 
 .sidebar nav {
@@ -123,13 +148,116 @@ export default {
   margin-top: 40px;
 }
 
-.sidebar a {
+.sidebar a,
+.sidebar button {
   color: white;
+  background: none;
+  border: none;
   text-decoration: none;
-  font-weight: 500;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-.logout {
+.logout-btn {
   margin-top: auto;
+}
+
+/* ===============================
+   MOBILE
+=============================== */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  /* Burger button */
+  .hamburger {
+    position: fixed;
+    top: 16px;
+    left: 14px;
+    z-index: 3000;
+    background: #E35336;
+    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: none;
+    font-size: 18px;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+
+  /* Dark overlay */
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1999;
+  }
+
+  /* Drawer */
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 75vw;
+    max-width: 260px;
+    background: #A14428;
+    padding: 18px 18px 22px 18px; /* top padding here */
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 2000;
+  }
+
+  /* Drawer header so first link never sits under burger */
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 6px;
+  }
+
+  .drawer-logo {
+    width: 130px;
+    height: auto;
+  }
+
+  .drawer-close {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 18px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+
+  .mobile-drawer a,
+  .mobile-drawer button {
+    color: white;
+    background: none;
+    border: none;
+    text-align: left;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .drawer-logout {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
 }
 </style>

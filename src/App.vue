@@ -1,13 +1,9 @@
 <template>
   <div class="layout">
 
-    <!-- Sidebar only if logged in -->
     <Sidebar v-if="auth.token" />
 
-    <div
-      class="main-content"
-      :class="{ 'with-sidebar': auth.token }"
-    >
+    <div class="main-content">
       <router-view />
     </div>
 
@@ -16,7 +12,7 @@
 
 <script>
 import { useAuthStore } from "./auth"
-import Sidebar from "./components/Navbar.vue" // we'll convert this
+import Sidebar from "./components/Navbar.vue"
 
 export default {
   components: { Sidebar },
@@ -29,6 +25,7 @@ export default {
 </script>
 
 <style>
+
 .layout {
   display: flex;
   min-height: 100vh;
@@ -38,18 +35,21 @@ export default {
 .main-content {
   flex: 1;
   padding: 40px;
-  margin-left: 80px;
-  transition: margin-left 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.sidebar.expanded ~ .main-content {
-  margin-left: 240px;
-}
-
+/* ================= MOBILE FIX ================= */
 @media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    padding: 80px 20px 20px 20px;
+
+  .layout {
+    flex-direction: column;
   }
+
+  /* Add LEFT SPACE so burger does not cover title */
+  .main-content {
+    padding: 90px 16px 20px 60px;
+  }
+
 }
+
 </style>

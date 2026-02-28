@@ -193,84 +193,57 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+/* Container */
 .container {
   padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto; /* CENTER THE WHOLE SECTION */
 }
 
-.add-movie {
-  margin-bottom: 10px;
-}
-
-.hint {
-  margin: 6px 0 10px;
-  color: #666;
-  font-size: 13px;
-}
-
-.row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.row input {
-  padding: 8px;
-  width: 320px;
-  max-width: 100%;
-}
-
-.row button {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.error {
-  color: red;
-  margin-top: 8px;
-  font-weight: bold;
-}
-
-.success {
-  color: green;
-  margin-top: 8px;
-  font-weight: bold;
-}
-
-.filter-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filter-bar input,
-.filter-bar select {
-  padding: 6px;
-}
-
-.filter-bar button {
-  padding: 6px 12px;
-}
-
-.secondary {
-  background: #ddd;
-  border: 1px solid #ccc;
-}
-
-.grid {
+/* Cards Grid */
+.cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
-  gap: 28px;
-  justify-content: center;   /* 🔥 centers entire grid */
-  margin-top: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  justify-items: center; /* CENTER EACH CARD */
 }
 
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
+/* Card */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 320px; /* prevent stretching */
 }
+
+/* Poster */
+.poster {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .container {
+    padding: 12px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards on mobile */
+    gap: 14px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+}
+
 </style>
