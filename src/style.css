@@ -319,6 +319,12 @@ a:hover {
 
 #app {
   display: flex;
+  width: 100%;
+}
+
+.layout {
+  flex: 1;        /* 🔥 this is the key */
+  width: 100%;
 }
 
 body {
@@ -331,4 +337,48 @@ router-view {
 
 html, body {
   overflow-x: hidden;
+}
+
+/* ============================= */
+/* DESKTOP GRID EXPANSION FIX */
+/* ============================= */
+
+@media (min-width: 1025px) {
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 28px;
+  }
+
+  .card {
+    max-width: 100%; /* remove width restriction */
+  }
+
+}
+
+/* ============================= */
+/* DESKTOP CONTENT WIDTH FIX */
+/* ============================= */
+
+@media (min-width: 1025px) {
+
+  .layout.with-sidebar {
+    display: flex;
+  }
+
+  .layout.with-sidebar .container {
+    flex: 1;               /* allow full width */
+    max-width: none;       /* remove width cap */
+  }
+
+}
+
+.layout.with-sidebar {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;          /* 🔥 THIS IS THE FIX */
+  width: 100%;
 }

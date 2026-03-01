@@ -218,18 +218,21 @@ export default {
 =============================== */
 
 /* Container */
-.container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
+/* =============================
+   DESKTOP FULL WIDTH FIX
+============================= */
+@media (min-width: 1025px) {
+  .container {
+    max-width: none;
+    margin: 0;
+  }
 }
 
 /* Cards Grid */
-.cards {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
 }
 
 /* Card */

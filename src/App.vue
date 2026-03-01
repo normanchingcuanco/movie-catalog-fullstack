@@ -1,7 +1,6 @@
 <template>
-  <div class="layout" :class="{ 'with-sidebar': auth.token }">
-    <Sidebar v-if="auth.userId" />
-
+  <div class="layout with-sidebar">
+    <Sidebar />
     <div class="main-content">
       <router-view />
     </div>

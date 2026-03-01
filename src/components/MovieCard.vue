@@ -153,33 +153,43 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+/* ============================= */
+/* MOVIE CARD - DESKTOP READY */
+/* ============================= */
+
 .movie-card {
-  width: 300px;
+  width: 100%;              /* 🔥 Let grid control width */
+  max-width: 320px;         /* Prevent over-stretching */
   display: flex;
   flex-direction: column;
-  align-items: center;   /* 🔥 centers inner content */
+  align-items: center;
   padding: 20px;
 }
 
+/* Poster wrapper */
 .poster-wrapper {
   width: 100%;
   display: flex;
-  justify-content: center;  /* 🔥 centers poster horizontally */
+  justify-content: center;
 }
 
+/* Poster */
 .poster {
-  width: 260px;
+  width: 100%;
+  max-width: 260px;         /* Keeps poster nice */
   height: 390px;
   object-fit: cover;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
+/* Content */
 .card-content {
   width: 100%;
   margin-top: 16px;
-  text-align: center;  /* 🔥 center text */
+  text-align: center;
 }
 
 .movie-title {
@@ -216,4 +226,20 @@ export default {
 .view-btn {
   width: 100%;
 }
+
+/* ============================= */
+/* MOBILE - KEEP YOUR 2 COLUMN LOOK */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .movie-card {
+    max-width: 100%;
+    padding: 14px;
+  }
+
+  .poster {
+    height: 300px;
+  }
+}
+
 </style>
