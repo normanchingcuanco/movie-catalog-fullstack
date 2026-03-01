@@ -86,7 +86,7 @@ export default {
       sort: "",
       currentPage: 1,
       totalPages: 1,
-      limit: 100,
+      limit: 12,
 
       newTitle: "",
       isAdding: false,

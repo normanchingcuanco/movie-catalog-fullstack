@@ -1,19 +1,27 @@
 ## Movie Catalog Fullstack
 
+## App Name: ReelTalk
+
 ## 1. Features
 
 ### All Users:
 
-- View Movies from the catalog  
-- Movies should be in a card.  
-- Simple Registration with only 3 fields.  
-- Users must be able to register and login using an email and a password.  
+- View movies from the catalog  
+- Movies are displayed in a card layout  
+- Simple registration with only 3 fields  
+
 
 ### Admin Users Only:
 
-- An Admin Dashboard to Display all movies in a table and Create movies  
+- An Admin Dashboard to display all movies in a table and create movies  
 - Add Movie button  
-  - “addMovie” as id  
+- “addMovie” as id  
+- Administrators can add new movies to the catalog  
+- Administrators can filter movies by title and genre  
+- Administrators can update and delete movies  
+- Administrators can update and delete user comments  
+- Movies are automatically sorted alphabetically from A–Z by title  
+- Comments are automatically sorted by createdAt date from newest to oldest   
 
 ### Logged In Users:
 
@@ -22,6 +30,11 @@
     - title, director, year, description, genre, comments  
   - View Movie button for each movie card  
     - “View Movie” as text  
+- Users must be able to register and log in using an email and password  
+- Users can add their favorite or recently watched movies  
+- Users can comment on movies and reply to other viewers’ comments to engage in discussions  
+- Users can add movies to their personal watchlist  
+- Users can rate movies and like or dislike them   
 
 ---
 
@@ -100,7 +113,7 @@ Admin Users Only:
 | Add Movie (Auto OMDb Fetch - Community Enabled) | ✅ Built | Logged-in users can add movies via OMDb |
 | Update Movie (Creator or Admin) | ✅ Built | Movie owner or admin can update movie details |
 | Delete Movie (Creator or Admin) | ✅ Built | Movie owner or admin can remove movies |
-| Duplicate Movie Guard (Title + Year) | ✅ Built | Prevent duplicate entries |
+| Duplicate Movie Guard (Title + Year) | ⚠️ Partially Implemented | Prevent duplicate entries |
 | View Single Movie | ✅ Built | Display full movie details |
 | Search Movies by Title | ✅ Built | Improve user experience |
 | Filter Movies by Genre | ✅ Built | Refined browsing |
@@ -109,6 +122,8 @@ Admin Users Only:
 | Sort by Most Liked | ✅ Built | Display most liked movies |
 | Sort by Trending | ✅ Built | Rank movies by rating + likes |
 | Track Movie Creator (createdBy) | ✅ Built | Identify which user added the movie |
+
+---
 
 ### 2. Engagement & Social Features
 
@@ -129,7 +144,9 @@ Admin Users Only:
 | Admin Delete Any Comment | ✅ Built | Moderation capability |
 | Like Comment | ✅ Built | Comment engagement |
 | Dislike Comment | ✅ Built | Balanced feedback |
-| Prevent Duplicate Comment Reactions | ✅ Built | Data integrity |
+| Prevent Duplicate Comment Reactions | ⚠️ Partially Implemented | Data integrity |
+
+---
 
 ### 3. Authentication & Role Control
 
@@ -139,6 +156,8 @@ Admin Users Only:
 | Role-Based Access Control | ✅ Built | Separate admin and user privileges |
 | Creator-Based Authorization | ✅ Built | Only movie owner or admin can modify movie |
 | Admin Override Permissions | ✅ Built | Admin full moderation rights |
+
+---
 
 ### 4. API Endpoints Implemented
 
@@ -162,6 +181,8 @@ Admin Users Only:
 | GET /movies/watchlist | ✅ Built | Get user watchlist |
 | GET /movies/admin/dashboard | ✅ Built | Admin dashboard summary |
 
+---
+
 ### 5. Advanced Moderation & Future Community Features
 
 | Feature | Status | Purpose |
@@ -176,6 +197,8 @@ Admin Users Only:
 | Comment Moderation Queue | ❌ Not Built | Admin review flagged comments |
 | User Profile Page (Contribution History) | ❌ Not Built | Display user-added movies and activity |
 
+---
+
 ### 6. System Optimization & Architecture Improvements
 
 | Feature | Status | Purpose |
@@ -188,4 +211,4 @@ Admin Users Only:
 | Logging & Monitoring (Winston / Morgan) | ❌ Not Built | Production-level observability |
 | API Documentation (Swagger / Postman Docs) | ❌ Not Built | Developer-friendly integration |
 | Caching Layer (Redis) | ❌ Not Built | Improve read performance |
-| Environment-Based Configuration | ❌ Not Built | Production deployment readiness |
+| Environment-Based Configuration | ✅ Built | Production deployment readiness |

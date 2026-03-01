@@ -382,3 +382,16 @@ html, body {
   flex: 1;          /* 🔥 THIS IS THE FIX */
   width: 100%;
 }
+
+.pagination {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pagination span {
+  font-weight: 600;
+}

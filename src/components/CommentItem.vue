@@ -51,16 +51,56 @@
         v-model="replyText"
         placeholder="Write a reply..."
       />
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <button type="button" @click="toggleEmojiPanel">
+          😊
+        </button>
+
+        <button type="button" @click="toggleGifPicker">
+          🎬
+        </button>
+      </div>
+
+      <!-- Emoji Panel -->
+      <div v-if="showEmojiPanel" class="emoji-panel">
+        <div class="emoji-grid">
+          <span
+            v-for="emoji in emojiList"
+            :key="emoji"
+            @click="insertEmoji(emoji)"
+          >
+            {{ emoji }}
+          </span>
+        </div>
+      </div>
+
+      <!-- GIF Panel -->
+      <div v-if="showGifPicker" class="gif-panel">
+        <input
+          v-model="gifSearch"
+          placeholder="Search GIF..."
+          @keyup.enter="searchGifs"
+        />
+
+        <div class="gif-grid">
+          <img
+            v-for="gif in gifs"
+            :key="gif.id"
+            :src="gif.images.fixed_width.url"
+            @click="selectGif(gif)"
+          />
+        </div>
+      </div>
+
       <button @click="addReply">
         Submit Reply
       </button>
     </div>
 
     <!-- REPLIES -->
-    <div
-      v-if="comment.replies?.length"
-      class="replies"
-    >
+    <div v-if="comment.replies?.length" class="replies">
       <CommentItem
         v-for="reply in comment.replies"
         :key="reply._id"
@@ -75,6 +115,7 @@
 <script>
 import api from "../api"
 import { useAuthStore } from "../auth"
+import { GiphyFetch } from "@giphy/js-fetch-api"
 
 export default {
   name: "CommentItem",
@@ -85,7 +126,19 @@ export default {
       showReply: false,
       replyText: "",
       isEditing: false,
-      editText: ""
+      editText: "",
+
+      // 🔥 NEW SAFE ADDITIONS
+      showEmojiPanel: false,
+      showGifPicker: false,
+      gifSearch: "",
+      gifs: [],
+      emojiList: [
+        "😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","😉","😍","😘",
+        "😜","🤪","🤨","😎","🥳","😤","😭","😡","😱","😴",
+        "🔥","💯","✨","🎉","❤️","👍","👎","🎬","🍿","⭐"
+      ],
+      gf: new GiphyFetch(import.meta.env.VITE_GIPHY_API_KEY)
     }
   },
 
@@ -106,7 +159,6 @@ export default {
   },
 
   methods: {
-    // 🔥 GIF DETECTION
     isGif(text) {
       return (
         typeof text === "string" &&
@@ -116,6 +168,39 @@ export default {
           text.includes("tenor.com")
         )
       )
+    },
+
+    toggleEmojiPanel() {
+      this.showEmojiPanel = !this.showEmojiPanel
+      this.showGifPicker = false
+    },
+
+    toggleGifPicker() {
+      this.showGifPicker = !this.showGifPicker
+      this.showEmojiPanel = false
+      if (this.showGifPicker) {
+        this.loadTrendingGifs()
+      }
+    },
+
+    insertEmoji(emoji) {
+      this.replyText += emoji
+    },
+
+    async loadTrendingGifs() {
+      const { data } = await this.gf.trending({ limit: 8 })
+      this.gifs = data
+    },
+
+    async searchGifs() {
+      if (!this.gifSearch.trim()) return
+      const { data } = await this.gf.search(this.gifSearch, { limit: 8 })
+      this.gifs = data
+    },
+
+    selectGif(gif) {
+      this.replyText = gif.images.original.url
+      this.showGifPicker = false
     },
 
     async addReply() {
@@ -133,6 +218,9 @@ export default {
 
       this.replyText = ""
       this.showReply = false
+      this.showEmojiPanel = false
+      this.showGifPicker = false
+
       this.$emit("refresh")
     },
 
@@ -192,36 +280,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.comment {
-  margin: 10px 0;
-  padding: 10px;
-  background: #f2f2f2;
-  border-radius: 6px;
-}
-
-.actions button {
-  margin-right: 10px;
-}
-
-.reply-box {
-  margin-top: 8px;
-}
-
-.replies {
-  margin-left: 20px;
-  margin-top: 8px;
-}
-
-textarea {
-  width: 100%;
-  min-height: 60px;
-}
-
-.gif {
-  max-width: 250px;
-  border-radius: 8px;
-  margin-top: 6px;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="card auth-card">
+    <form class="card auth-card" @submit.prevent="handleRegister">
 
       <!-- Header with logo -->
       <div class="auth-header">
@@ -30,7 +30,7 @@
         placeholder="Password"
       />
 
-      <button class="primary" @click="handleRegister">
+      <button class="primary" type="submit">
         Register
       </button>
 
@@ -41,7 +41,7 @@
         </router-link>
       </p>
 
-    </div>
+    </form>
   </div>
 </template>
 
