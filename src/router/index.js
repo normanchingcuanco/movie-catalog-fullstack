@@ -11,8 +11,8 @@ import AdminDashboard from "../pages/AdminDashboard.vue"
 const routes = [
   { path: "/", redirect: "/login" },
 
-  { path: "/register", component: Register },
-  { path: "/login", component: Login },
+  { path: "/register", component: Register, meta: { hideSidebar: true } },
+  { path: "/login", component: Login, meta: { hideSidebar: true } },
 
   {
     path: "/movies",

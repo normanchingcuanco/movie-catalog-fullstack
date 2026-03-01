@@ -1,6 +1,6 @@
 <template>
-  <div class="layout with-sidebar">
-    <Sidebar />
+  <div class="layout" :class="{ 'with-sidebar': showSidebar }">
+    <Sidebar v-if="showSidebar" />
     <div class="main-content">
       <router-view />
     </div>
@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { computed } from "vue"
+import { useRoute } from "vue-router"
 import { useAuthStore } from "./auth"
 import Sidebar from "./components/Navbar.vue"
 
@@ -16,13 +18,17 @@ export default {
 
   setup() {
     const auth = useAuthStore()
-    return { auth }
+    const route = useRoute()
+
+    // Hide sidebar on login/register routes
+    const showSidebar = computed(() => route.meta?.hideSidebar !== true)
+
+    return { auth, showSidebar }
   }
 }
 </script>
 
 <style>
-
 .layout {
   display: flex;
   min-height: 100vh;
@@ -37,14 +43,16 @@ export default {
   transition: all 0.3s ease;
 }
 
+/* If sidebar is hidden (login/register), remove the left offset */
+.layout:not(.with-sidebar) .main-content {
+  margin-left: 0;
+}
+
 /* Mobile */
 @media (max-width: 1024px) {
-
   .main-content {
     margin-left: 0;
     padding: 90px 16px 20px 16px;
   }
-
 }
-
 </style>
