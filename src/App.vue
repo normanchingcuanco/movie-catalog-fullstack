@@ -1,12 +1,10 @@
 <template>
-  <div class="layout">
-
-    <Sidebar v-if="auth.token" />
+  <div class="layout" :class="{ 'with-sidebar': auth.token }">
+    <Sidebar v-if="auth.userId" />
 
     <div class="main-content">
       <router-view />
     </div>
-
   </div>
 </template>
 
@@ -32,22 +30,20 @@ export default {
   background: #F5F5DC;
 }
 
+/* Desktop layout */
 .main-content {
   flex: 1;
   padding: 40px;
+  margin-left: 120px; /* sidebar width */
   transition: all 0.3s ease;
 }
 
-/* ================= MOBILE FIX ================= */
-@media (max-width: 768px) {
+/* Mobile */
+@media (max-width: 1024px) {
 
-  .layout {
-    flex-direction: column;
-  }
-
-  /* Add LEFT SPACE so burger does not cover title */
   .main-content {
-    padding: 90px 16px 20px 60px;
+    margin-left: 0;
+    padding: 90px 16px 20px 16px;
   }
 
 }

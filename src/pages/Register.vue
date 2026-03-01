@@ -1,47 +1,60 @@
 <template>
-  <div class="container auth-container">
-    <h2>Create Your ReelTalk Account</h2>
+  <div class="container">
+    <div class="card auth-card">
 
-    <form @submit.prevent="register" class="auth-form">
+      <!-- Header with logo -->
+      <div class="auth-header">
+        <h2>Create Account</h2>
+        <img
+          src="/logo_reeltalk.png"
+          alt="ReelTalk Logo"
+          class="auth-logo"
+        />
+      </div>
 
       <input
         v-model="username"
         type="text"
         placeholder="Username"
-        required
       />
 
       <input
         v-model="email"
         type="email"
         placeholder="Email"
-        required
       />
 
       <input
         v-model="password"
         type="password"
         placeholder="Password"
-        required
       />
 
-      <button class="primary" type="submit">
+      <button class="primary" @click="handleRegister">
         Register
       </button>
 
-      <p class="auth-switch">
+      <p>
         Already have an account?
-        <router-link to="/login">Login</router-link>
+        <router-link to="/login">
+          Login
+        </router-link>
       </p>
 
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
 import api from "../api"
+import { useRouter } from "vue-router"
 
 export default {
+  setup() {
+    const router = useRouter()
+    return { router }
+  },
+
   data() {
     return {
       username: "",
@@ -49,29 +62,103 @@ export default {
       password: ""
     }
   },
-  methods: {
-    async register() {
-      await api.post("/users/register", {
-        username: this.username,
-        email: this.email,
-        password: this.password
-      })
 
-      alert("Registered successfully")
-      this.$router.push("/login")
+  methods: {
+    async handleRegister() {
+      try {
+        await api.post("/users/register", {
+          username: this.username,
+          email: this.email,
+          password: this.password
+        })
+
+        this.router.push("/login")
+
+      } catch (error) {
+        alert(
+          error.response?.data?.message ||
+          "Registration failed"
+        )
+      }
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+
+/* ===============================
+   AUTH HEADER WITH LOGO
+=============================== */
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.auth-logo {
+  width: 190px; /* enlarged logo */
+  height: auto;
+}
+
+/* ===============================
+   BASE STYLING
+=============================== */
 .container {
-  padding: 20px;
+  padding: 40px 20px !important;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
-input {
-  display: block;
-  margin: 8px 0;
-  padding: 8px;
-  width: 280px;
+
+.auth-card {
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
 }
+
+.auth-card input {
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.auth-card button {
+  width: 100%;
+}
+
+/* ===============================
+   DESKTOP FULL VIEW CENTERING
+=============================== */
+@media (min-width: 1025px) {
+
+  .container {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px;
+  }
+
+}
+
+/* ===============================
+   MOBILE SETTINGS
+=============================== */
+@media (max-width: 768px) {
+
+  .container {
+    padding: 20px !important;
+  }
+
+  .auth-card {
+    max-width: 100%;
+    transform: translateX(-22px);
+  }
+
+}
+
 </style>

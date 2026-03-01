@@ -86,7 +86,7 @@ export default {
       sort: "",
       currentPage: 1,
       totalPages: 1,
-      limit: 8,
+      limit: 100,
 
       newTitle: "",
       isAdding: false,
@@ -195,11 +195,33 @@ export default {
 
 <style scoped>
 
+/* ===============================
+   DESKTOP FIX
+=============================== */
+@media (min-width: 1025px) {
+
+  .container {
+    max-width: none;        /* remove 1100px cap */
+    margin: 0;              /* stop centering */
+    padding-left: 40px;     /* normal spacing from sidebar */
+    padding-right: 40px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+}
+
+/* ===============================
+   BASE (UNCHANGED)
+=============================== */
+
 /* Container */
 .container {
   padding: 20px;
   max-width: 1100px;
-  margin: 0 auto; /* CENTER THE WHOLE SECTION */
+  margin: 0 auto;
 }
 
 /* Cards Grid */
@@ -207,7 +229,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
-  justify-items: center; /* CENTER EACH CARD */
+  justify-items: center;
 }
 
 /* Card */
@@ -217,7 +239,7 @@ export default {
   padding: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.05);
   width: 100%;
-  max-width: 320px; /* prevent stretching */
+  max-width: 320px;
 }
 
 /* Poster */
@@ -228,7 +250,9 @@ export default {
   display: block;
 }
 
-/* MOBILE */
+/* ===============================
+   MOBILE (DO NOT TOUCH)
+=============================== */
 @media (max-width: 768px) {
 
   .container {
@@ -236,7 +260,7 @@ export default {
   }
 
   .cards {
-    grid-template-columns: repeat(2, 1fr); /* 2 cards on mobile */
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
 

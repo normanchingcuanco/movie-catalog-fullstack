@@ -1,149 +1,149 @@
 <template>
-  <div class="auth-wrapper">
-    <div class="auth-card">
+  <div class="container">
+    <div class="card auth-card">
 
-      <div class="auth-heading">
-        <span>Welcome Back to</span>
+      <!-- Header with logo -->
+      <div class="auth-header">
+        <h2>Welcome Back to</h2>
         <img
           src="/logo_reeltalk.png"
-          alt="ReelTalk"
-          class="auth-logo-inline"
+          alt="ReelTalk Logo"
+          class="auth-logo"
         />
       </div>
 
-      <form @submit.prevent="login" class="auth-form">
-        <input v-model="email" type="email" placeholder="Email" required />
-        <input v-model="password" type="password" placeholder="Password" required />
+      <input
+        v-model="email"
+        type="email"
+        placeholder="Email"
+      />
 
-        <button type="submit" class="primary full-btn" :disabled="isLoading">
-          {{ isLoading ? "Logging in..." : "Login" }}
-        </button>
+      <input
+        v-model="password"
+        type="password"
+        placeholder="Password"
+      />
 
-        <p class="auth-footer">
-          Don’t have an account?
-          <router-link to="/register">Register</router-link>
-        </p>
+      <button class="primary" @click="handleLogin">
+        Login
+      </button>
 
-        <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
-      </form>
+      <p>
+        Don’t have an account?
+        <router-link to="/register">
+          Register
+        </router-link>
+      </p>
 
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue"
-import { useRouter } from "vue-router"
 import { useAuthStore } from "../auth"
+import { useRouter } from "vue-router"
 
 export default {
   setup() {
     const auth = useAuthStore()
     const router = useRouter()
+    return { auth, router }
+  },
 
-    const email = ref("")
-    const password = ref("")
-    const errorMsg = ref("")
-    const isLoading = ref(false)
+  data() {
+    return {
+      email: "",
+      password: ""
+    }
+  },
 
-    const login = async () => {
-      errorMsg.value = ""
-      isLoading.value = true
-
+  methods: {
+    async handleLogin() {
       try {
-        await auth.login(email.value, password.value)
-
-        // sanity check: token must exist now
-        if (!auth.token) {
-          throw new Error("Token was not saved. Please try again.")
-        }
-
-        router.push("/movies")
-      } catch (e) {
-        errorMsg.value = e?.message || "Login failed."
-      } finally {
-        isLoading.value = false
+        await this.auth.login(this.email, this.password)
+        this.router.push("/movies")
+      } catch (error) {
+        alert(error.message || "Invalid credentials")
       }
     }
-
-    return { email, password, login, errorMsg, isLoading }
   }
 }
 </script>
 
-<style>
+<style scoped>
 
-.auth-wrapper {
-  min-height: 100vh;
+/* ===============================
+   AUTH HEADER WITH LOGO
+=============================== */
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.auth-logo {
+  width: 220px;
+  height: auto;
+}
+
+/* ===============================
+   BASE STYLING
+=============================== */
+.container {
+  padding: 40px 20px !important;
+  max-width: 1100px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
-  align-items: center;
-  background: #F5F5DC;
 }
 
 .auth-card {
-  width: 380px;
-  padding: 40px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  max-width: 340px;
+  width: 100%;
   text-align: center;
 }
 
-.auth-heading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 30px;
-  font-weight: 600;
-}
-
-.auth-heading span {
-  font-size: 20px;
-}
-
-.auth-logo-inline {
-  height: 70px;
-  margin-top: 3px;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.auth-form input {
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-}
-
-.full-btn {
+.auth-card input {
+  margin-bottom: 14px;
   width: 100%;
-  padding: 12px;
-  border-radius: 999px;
 }
 
-.auth-footer {
-  margin-top: 10px;
-  font-size: 14px;
+.auth-card button {
+  width: 100%;
 }
 
-.auth-footer a {
-  color: #E35336;
-  text-decoration: none;
-  font-weight: 500;
+/* ===============================
+   DESKTOP FULL VIEW CENTERING
+=============================== */
+@media (min-width: 1025px) {
+
+  .container {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px;
+  }
+
 }
 
-.auth-footer a:hover {
-  text-decoration: underline;
-}
+/* ===============================
+   MOBILE SETTINGS
+=============================== */
+@media (max-width: 768px) {
 
-.error {
-  color: red;
-  margin-top: 8px;
+  .container {
+    padding: 20px !important;
+  }
+
+  .auth-card {
+    max-width: 100%;
+    transform: translateX(-22px);
+  }
+
 }
 
 </style>

@@ -66,10 +66,26 @@ p {
 /* ============================= */
 
 .container {
-  padding: 40px 60px 40px 120px; /* left padding accounts for sidebar */
+  padding: 40px 60px;
   width: 100%;
-  max-width: none;              /* remove restriction */
+  max-width: none;
   margin: 0;
+}
+
+/* Only pages with sidebar should reserve space on desktop */
+.layout.with-sidebar .container {
+  padding-left: 120px;
+}
+
+/* Mobile: remove sidebar reserved space */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .layout.with-sidebar .container {
+    padding-left: 20px;
+  }
 }
 
 /* ============================= */
@@ -87,6 +103,24 @@ p {
 .card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-hover);
+}
+
+/* ============================= */
+/* MOVIE / WATCHLIST GRID */
+/* ============================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 30px;
+  width: 100%;
+}
+
+/* Extra large desktop boost */
+@media (min-width: 1600px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
 }
 
 /* ============================= */

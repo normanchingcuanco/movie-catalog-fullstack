@@ -165,11 +165,18 @@ export default {
 }
 
 /* ===============================
-   MOBILE
+   MOBILE (Phones + Landscape)
 =============================== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+
+  /* Hide desktop sidebar completely */
   .sidebar {
-    display: none;
+    display: none !important;
+  }
+
+  /* Prevent any desktop nav children from rendering outside */
+  .sidebar * {
+    display: none !important;
   }
 
   /* Burger button */
@@ -177,7 +184,7 @@ export default {
     position: fixed;
     top: 16px;
     left: 14px;
-    z-index: 3000;
+    z-index: 4000;
     background: #E35336;
     color: white;
     width: 42px;
@@ -194,8 +201,8 @@ export default {
   .mobile-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 1999;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 3500;
   }
 
   /* Drawer */
@@ -205,23 +212,23 @@ export default {
     left: 0;
     height: 100vh;
     width: 75vw;
-    max-width: 260px;
+    max-width: 280px;
     background: #A14428;
-    padding: 18px 18px 22px 18px; /* top padding here */
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 18px;
-    z-index: 2000;
+    z-index: 3600;
   }
 
-  /* Drawer header so first link never sits under burger */
+  /* Drawer header */
   .drawer-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
     border-bottom: 1px solid rgba(255,255,255,0.2);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .drawer-logo {
@@ -256,8 +263,10 @@ export default {
 
   .drawer-logout {
     margin-top: auto;
-    padding-top: 12px;
+    padding-top: 14px;
     border-top: 1px solid rgba(255,255,255,0.2);
   }
+
 }
+
 </style>
