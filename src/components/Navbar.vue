@@ -8,7 +8,11 @@
       :class="{ expanded }"
     >
       <div class="logo">
-        <img src="/logo_reeltalk.png" alt="ReelTalk" />
+        <img
+          src="/logo_reeltalk.png"
+          alt="ReelTalk"
+          :class="{ collapsed: !expanded }"
+        />
       </div>
 
       <nav>
@@ -137,8 +141,21 @@ export default {
   width: 220px;
 }
 
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .logo img {
   width: 160px;
+  transition: width 0.3s ease;
+}
+
+/* When sidebar is collapsed */
+.logo img.collapsed {
+  width: 60px;
 }
 
 .sidebar nav {
